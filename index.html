@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>내 이름 · 과학교사 포트폴리오</title>
+<meta name="description" content="수업을 연구하고 기록하는 과학교사의 포트폴리오입니다.">
+<!-- 🔒 검색 허용 스위치: 아래 줄이 있으면 검색에 안 나옴(제작 중). 검색에 나오게 하려면 이 줄을 지우세요. -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --bg:#f7f8fb; --card:#ffffff; --ink:#1b2333; --sub:#5d6678; --line:#e3e7ef;
+  --main:#1f4fd8; --main-soft:#e8eeff; --accent:#ff8a3d; --accent-soft:#fff1e6;
+  --radius:28px; --shadow:0 10px 30px rgba(31,79,216,.10);
+  --round:'Pretendard',system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#0f1420;--card:#171e2e;--ink:#eef1f8;--sub:#a3adc2;--line:#27314a;
+    --main:#7da2ff;--main-soft:#1c2744;--accent:#ffa561;--accent-soft:#33261b;--shadow:0 10px 30px rgba(0,0,0,.35);}
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{font-family:'Pretendard',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.75;word-break:keep-all;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+
+/* nav */
+nav{position:sticky;top:10px;z-index:50;padding:0 14px}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:58px;background:color-mix(in srgb,var(--card) 88%,transparent);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;box-shadow:var(--shadow);padding:0 12px 0 24px;max-width:760px}
+.brand{font-weight:800;letter-spacing:-.02em;font-size:1.15rem}
+.brand span{color:var(--accent)}
+.menu{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.menu::-webkit-scrollbar{display:none}
+.menu a{padding:7px 15px;border-radius:999px;font-size:.92rem;color:var(--sub);white-space:nowrap;transition:.2s}
+.menu a:hover,.menu a.on{background:var(--main-soft);color:var(--main);font-weight:700}
+
+/* hero */
+.hero{position:relative;padding:72px 0 56px;display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center}
+.hero::before,.hero::after{content:"";position:absolute;border-radius:50%;z-index:-1}
+.hero::before{width:260px;height:260px;background:var(--main-soft);right:-60px;top:20px;opacity:.7}
+.hero::after{width:120px;height:120px;background:var(--accent-soft);left:42%;bottom:6px}
+.tag{display:inline-block;background:var(--accent-soft);color:var(--accent);font-weight:800;font-size:.88rem;padding:6px 16px;border-radius:999px;margin-bottom:18px}
+h1{font-weight:800;letter-spacing:-.03em;font-size:clamp(2rem,5vw,3.2rem);line-height:1.28}
+h1 em{font-style:normal;color:var(--main)}
+.hero p{margin-top:18px;color:var(--sub);font-size:1.05rem;max-width:34em}
+.btns{display:flex;gap:10px;margin-top:28px;flex-wrap:wrap}
+.btn{padding:13px 26px;border-radius:999px;font-weight:700;font-size:.95rem;transition:.25s;border:1px solid var(--line);background:var(--card);display:inline-block}
+.btn.primary{background:var(--main);color:#fff;border-color:var(--main);box-shadow:0 8px 20px rgba(31,79,216,.25)}
+.btn:hover{transform:translateY(-3px) scale(1.03)}
+
+/* profile */
+.profile{text-align:center}
+.avatar{width:min(100%,300px);aspect-ratio:1;margin:0 auto;border-radius:50%;background:linear-gradient(135deg,var(--main),#6a8dff 55%,var(--accent));box-shadow:0 14px 34px rgba(31,79,216,.25),0 0 0 8px var(--card);overflow:hidden;animation:bob 3.4s ease-in-out infinite}
+.avatar img{width:100%;height:100%;display:block;object-fit:cover}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@media (prefers-reduced-motion:reduce){.avatar{animation:none}}
+.pname{margin-top:22px;font-weight:800;letter-spacing:-.02em;font-size:1.5rem}
+.pmajor{display:inline-block;margin-top:6px;background:var(--main-soft);color:var(--main);font-weight:700;font-size:.92rem;padding:4px 16px;border-radius:999px}
+
+/* sections */
+section{padding:60px 0}
+.eyebrow{color:var(--accent);font-weight:800;font-size:.85rem;letter-spacing:.1em}
+h2{font-weight:800;letter-spacing:-.02em;font-size:clamp(1.5rem,3.4vw,2.1rem);margin:4px 0 10px}
+.lead{color:var(--sub);margin-bottom:32px;max-width:40em}
+
+.letter{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:38px;box-shadow:var(--shadow)}
+.letter p+p{margin-top:14px}
+
+/* cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px;transition:.3s cubic-bezier(.34,1.56,.64,1);display:flex;flex-direction:column;gap:8px}
+.card:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:var(--main)}
+.ico{width:52px;height:52px;border-radius:50%;background:var(--main-soft);display:grid;place-items:center;font-size:1.5rem}
+.card h3{font-weight:700;font-size:1.12rem}
+.card p{color:var(--sub);font-size:.94rem;flex:1}
+.card .go{color:var(--main);font-weight:700;font-size:.9rem}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:.78rem;background:var(--main-soft);color:var(--main);padding:4px 12px;border-radius:999px;font-weight:700}
+.badge{position:absolute;top:18px;right:18px;background:var(--accent);color:#fff;font-size:.72rem;font-weight:800;padding:4px 12px;border-radius:999px}
+
+/* contact */
+.contact{background:linear-gradient(135deg,var(--main),#4a73f0);color:#fff;border-radius:44px;padding:54px 34px;text-align:center;position:relative;overflow:hidden}
+.contact::before{content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.12);left:-40px;top:-50px}
+.contact::after{content:"";position:absolute;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.1);right:-20px;bottom:-30px}
+.contact h2{color:#fff;position:relative}
+.contact p,.contact .btn{position:relative}
+.contact p{opacity:.92;margin-bottom:22px}
+.contact .btn{background:#fff;color:var(--main);border-color:#fff}
+footer{padding:36px 0 56px;text-align:center;color:var(--sub);font-size:.88rem}
+
+/* reveal animation */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+
+@media (max-width:760px){
+  .hero{grid-template-columns:1fr;padding-top:40px}
+  .profile{order:-1}
+  .brand{display:none}
+  nav .wrap{padding:0 8px;justify-content:center}
+  .letter{padding:26px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top">내 이름<span>.</span></a>
+    <div class="menu">
+      <a href="#about">소개</a>
+      <a href="#teaching">수업</a>
+      <a href="#works">자료</a>
+      <a href="#contact">연락</a>
+    </div>
+  </div>
+</nav>
+
+<main id="top">
+<div class="wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="rv">
+      <span class="tag">포트폴리오</span>
+      <h1>수업을 고민하고,<br><em>기록하며 성장하는</em><br>과학교사입니다</h1>
+      <p>학생들이 과학을 즐겁게 만나길 꿈꾸는 교사입니다. 수업 준비와 시행착오, 그리고 배움의 기록을 이곳에 모아 둡니다.</p>
+      <div class="btns">
+        <a class="btn primary" href="#works">자료 둘러보기</a>
+      </div>
+    </div>
+
+    <div class="profile rv">
+      <div class="avatar">
+        <img src="profile.png" alt="검은 단발머리에 파란 옷을 입고 손을 흔드는 캐릭터" width="640" height="640">
+      </div>
+      <!-- ✏️ 이름을 바꿔 주세요 -->
+      <div class="pname">내 이름</div>
+      <div class="pmajor">전공 · 물리</div>
+    </div>
+  </header>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="rv">
+      <div class="eyebrow">ABOUT</div>
+      <h2>여는 편지</h2>
+      <p class="lead">이 페이지를 찾아주신 분께 드리는 인사입니다.</p>
+    </div>
+    <div class="letter rv">
+      <p>교단에 선 뒤 여러 학교를 다니며 배운 바가 많습니다. 학생도, 교실의 분위기도 달랐고, 그 차이 속에서 수업을 어떻게 설계해야 하는지 계속해서 배워 나가고 있습니다.</p>
+      <p>그동안 운 좋게도 참 훌륭한 동료 교사분들, 학생들을 만났습니다. 그 덕분에 제가 하고자 했던 것보다 더 좋은 수업을 하기 위해 많은 노력을 쏟고 있습니다.</p>
+      <p>다양한 AI 도구를 사용해서 이렇게 만들었지만, 사실 AI가 발달할수록 교육은 더욱더 본질로 돌아가야 한다고 생각합니다.</p>
+      <p>학생들이 무엇을 궁금해할지, 궁금증을 가지게 하려면 어떤 노력을 해야 할지, AI 시대에 스스로 생각하는 힘을 길러 주려면 무엇을 해야 할지. AI를 아예 못 쓰게 막아야 할지, 아니면 어떻게 쓰는지를 가르쳐야 할지. 이런 고민을 정말 많이 합니다.</p>
+      <p>이 페이지를 방문하신 선생님들과 함께 교육에 대한 고민을 나누며 조언도 주고받을 수 있으면 좋겠습니다.</p>
+      <p>항상 평안한 하루 되세요^^</p>
+    </div>
+  </section>
+
+  <!-- TEACHING -->
+  <section id="teaching">
+    <div class="rv">
+      <div class="eyebrow">TEACHING</div>
+      <h2>수업에서 중요하게 생각하는 것</h2>
+      <p class="lead">제가 수업을 준비할 때 가장 신경 쓰는 세 가지입니다.</p>
+    </div>
+    <div class="grid">
+      <article class="card rv">
+        <span class="badge">가장 중요하게 생각해요</span>
+        <div class="ico">👁️</div>
+        <h3>시각화</h3>
+        <p>전류, 전기장, 자기장처럼 눈에 보이지 않는 개념을 그림, 도해, 애니메이션, 시뮬레이션으로 눈에 보이게 만들어 학생들이 직접 느낄 수 있는 수업을 지향합니다.</p>
+        <div class="chips"><span class="chip">개념 시각화</span><span class="chip">시뮬레이션</span></div>
+      </article>
+      <article class="card rv"><div class="ico">📝</div><h3>평가 설계</h3><p>학습목표에서 출발해 평가 요소를 만들고, 수업과 평가가 이어지도록 문항을 설계합니다.</p><div class="chips"><span class="chip">평가 요소</span><span class="chip">문항 출제</span></div></article>
+      <article class="card rv"><div class="ico">💻</div><h3>디지털 도구 활용</h3><p>AI와 디지털 도구를 수업과 업무에 적용하며 효과적인 방법을 찾아갑니다.</p><div class="chips"><span class="chip">AI</span><span class="chip">에듀테크</span></div></article>
+    </div>
+  </section>
+
+  <!-- WORKS -->
+  <section id="works">
+    <div class="rv">
+      <div class="eyebrow">WORKS</div>
+      <h2>자료</h2>
+      <p class="lead">직접 만든 수업 자료와 결과물을 모아 둘 공간입니다.</p>
+    </div>
+    <div class="grid">
+      <!-- ✏️ href="#" 를 실제 링크로 바꾸고 제목·설명을 수정하세요 -->
+      <a class="card rv" href="#"><div class="ico">📊</div><h3>수업 PPT 모음</h3><p>단원별로 정리한 수업용 슬라이드입니다.</p><span class="go">열어보기 ↗</span></a>
+      <a class="card rv" href="#"><div class="ico">🧪</div><h3>실험·활동지</h3><p>학생 활동을 위한 학습지와 실험 안내입니다.</p><span class="go">열어보기 ↗</span></a>
+      <a class="card rv" href="#"><div class="ico">📚</div><h3>평가 자료</h3><p>평가 요소와 문항 설계 사례입니다.</p><span class="go">열어보기 ↗</span></a>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact rv">
+      <h2>이 인연이 오래 이어지면 좋겠습니다</h2>
+      <p>수업 이야기나 문의사항은 언제든 환영합니다.</p>
+      <!-- ✏️ 이메일 주소를 바꿔 주세요 -->
+      <a class="btn" href="mailto:example@email.com">메일 보내기</a>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<footer>
+  <div class="wrap">© 2026 내 이름</div>
+</footer>
+
+<script>
+// 스크롤 등장 애니메이션
+const io = new IntersectionObserver((es)=>{
+  es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+},{threshold:.12});
+document.querySelectorAll('.rv').forEach((el,i)=>{ el.style.transitionDelay=(i%4)*70+'ms'; io.observe(el); });
+
+// 현재 섹션 메뉴 강조
+const links=[...document.querySelectorAll('.menu a')];
+const secs=links.map(a=>document.querySelector(a.getAttribute('href')));
+const spy=new IntersectionObserver((es)=>{
+  es.forEach(e=>{ if(e.isIntersecting){
+    links.forEach(l=>l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id));
+  }});
+},{rootMargin:'-45% 0px -50% 0px'});
+secs.forEach(s=>s&&spy.observe(s));
+</script>
+</body>
+</html>
