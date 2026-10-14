@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>수업 PPT 모음 · 박세현</title>
+<meta name="description" content="학년별 수업 PPT 모음입니다.">
+<!-- 🔒 검색 허용 스위치: 이 줄이 있으면 검색에 안 나옴. 검색에 나오게 하려면 이 줄을 지우세요. -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --bg:#f7f8fb; --card:#ffffff; --ink:#1b2333; --sub:#5d6678; --line:#e3e7ef;
+  --main:#1f4fd8; --main-soft:#e8eeff; --accent:#ff8a3d; --accent-soft:#fff1e6;
+  --radius:28px; --shadow:0 10px 30px rgba(31,79,216,.10);
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#0f1420;--card:#171e2e;--ink:#eef1f8;--sub:#a3adc2;--line:#27314a;
+    --main:#7da2ff;--main-soft:#1c2744;--accent:#ffa561;--accent-soft:#33261b;--shadow:0 10px 30px rgba(0,0,0,.35);}
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;word-break:keep-all}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px}
+
+.top{padding:36px 0 8px}
+.back{display:inline-block;padding:8px 18px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-weight:700;font-size:.9rem;transition:.25s}
+.back:hover{transform:translateX(-3px);border-color:var(--main);color:var(--main)}
+header.title{padding:28px 0 28px}
+.tag{display:inline-block;background:var(--accent-soft);color:var(--accent);font-weight:800;font-size:.85rem;padding:6px 16px;border-radius:999px;margin-bottom:14px}
+h1{font-size:clamp(1.8rem,5vw,2.5rem);font-weight:800;letter-spacing:-.03em;line-height:1.3}
+header.title p{margin-top:10px;color:var(--sub)}
+
+/* 아코디언 */
+.list{display:grid;gap:14px;padding-bottom:70px}
+.acc{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:border-color .25s,box-shadow .25s}
+.acc.open{border-color:var(--main);box-shadow:var(--shadow)}
+.head{width:100%;display:flex;align-items:center;gap:14px;padding:20px 24px;background:none;border:0;font:inherit;color:inherit;cursor:pointer;text-align:left}
+.ico{flex:none;width:48px;height:48px;border-radius:50%;background:var(--main-soft);display:grid;place-items:center;font-size:1.4rem}
+.head h2{flex:1;font-size:1.25rem;font-weight:700}
+.count{font-size:.8rem;font-weight:700;background:var(--main-soft);color:var(--main);padding:4px 12px;border-radius:999px}
+.arrow{flex:none;width:30px;height:30px;border-radius:50%;background:var(--main-soft);color:var(--main);display:grid;place-items:center;font-size:.8rem;transition:transform .3s}
+.acc.open .arrow{transform:rotate(180deg)}
+.head:focus-visible{outline:3px solid var(--main);outline-offset:-3px;border-radius:var(--radius)}
+
+.body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease}
+.acc.open .body{grid-template-rows:1fr}
+.body>div{overflow:hidden}
+ol.units{list-style:none;padding:2px 20px 20px;display:grid;gap:8px}
+.unit{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:18px;background:var(--bg);border:1px solid transparent;transition:.2s}
+a.unit:hover{border-color:var(--main);transform:translateX(4px)}
+.num{flex:none;width:28px;height:28px;border-radius:50%;background:var(--main);color:#fff;font-size:.82rem;font-weight:800;display:grid;place-items:center}
+.uname{flex:1;font-weight:600}
+.state{flex:none;font-size:.78rem;font-weight:700;padding:3px 12px;border-radius:999px}
+.state.go{background:var(--main);color:#fff}
+.state.soon{background:var(--accent-soft);color:var(--accent)}
+
+@media (prefers-reduced-motion:reduce){.body,.arrow,.acc,.unit{transition:none}}
+@media (max-width:520px){.head{padding:16px 16px}.ico{width:42px;height:42px}ol.units{padding:2px 12px 16px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><a class="back" href="index.html">← 포트폴리오로</a></div>
+  <header class="title">
+    <span class="tag">수업 자료</span>
+    <h1>수업 PPT 모음</h1>
+    <p>학년을 누르면 단원 목록이 펼쳐져요.</p>
+  </header>
+  <main class="list" id="list"></main>
+</div>
+
+<script>
+/* ============================================================
+   ✏️ 여기만 고치면 돼요!
+   - 학년 추가/삭제: { ... } 덩어리 하나를 복사하거나 지우세요.
+   - 단원 이름: name 을 바꾸세요.
+   - PPT 링크: url 의 "" 안에 주소를 넣으면 '열기' 버튼이 생겨요.
+     (비워 두면 '준비 중'으로 표시돼요.)
+   - 단원명은 예시예요. 사용하시는 교육과정에 맞게 바꿔 주세요.
+   ============================================================ */
+const DATA = [
+  { grade: "중1", icon: "🌱", units: [
+    { name: "지권의 변화", url: "" },
+    { name: "여러 가지 힘", url: "" },
+    { name: "생물의 다양성", url: "" },
+    { name: "기체의 성질", url: "" },
+    { name: "물질의 상태 변화", url: "" },
+    { name: "빛과 파동", url: "" },
+    { name: "과학과 나의 미래", url: "" }
+  ]},
+  { grade: "중2", icon: "🔬", units: [
+    { name: "물질의 구성", url: "" },
+    { name: "전기와 자기", url: "" },
+    { name: "태양계", url: "" },
+    { name: "식물과 에너지", url: "" },
+    { name: "동물과 에너지", url: "" }
+  ]},
+  { grade: "중3", icon: "🚀", units: [
+    { name: "화학 반응의 규칙과 에너지 변화", url: "" },
+    { name: "기권과 날씨", url: "" },
+    { name: "운동과 에너지", url: "" },
+    { name: "자극과 반응", url: "" },
+    { name: "생식과 유전", url: "" },
+    { name: "에너지 전환과 보존", url: "" },
+    { name: "별과 우주", url: "" },
+    { name: "과학기술과 인류 문명", url: "" }
+  ]},
+  { grade: "통합과학", icon: "🧪", units: [
+    { name: "과학의 기초", url: "" },
+    { name: "물질과 규칙성", url: "" },
+    { name: "시스템과 상호작용", url: "" },
+    { name: "변화와 다양성", url: "" },
+    { name: "환경과 에너지", url: "" }
+  ]},
+  { grade: "물리1", icon: "⚡", units: [
+    { name: "역학과 에너지", url: "" },
+    { name: "물질과 전자기장", url: "" },
+    { name: "파동과 정보 통신", url: "" }
+  ]}
+];
+/* ============================================================ */
+
+const list = document.getElementById('list');
+
+DATA.forEach((g, gi) => {
+  const acc = document.createElement('section');
+  acc.className = 'acc';
+
+  const head = document.createElement('button');
+  head.type = 'button';
+  head.className = 'head';
+  head.setAttribute('aria-expanded', 'false');
+  head.setAttribute('aria-controls', 'panel-' + gi);
+
+  const ico = document.createElement('span'); ico.className = 'ico'; ico.textContent = g.icon || '📘';
+  const h2 = document.createElement('h2'); h2.textContent = g.grade;
+  const cnt = document.createElement('span'); cnt.className = 'count'; cnt.textContent = g.units.length + '개 단원';
+  const arrow = document.createElement('span'); arrow.className = 'arrow'; arrow.textContent = '▼'; arrow.setAttribute('aria-hidden', 'true');
+  head.append(ico, h2, cnt, arrow);
+
+  const body = document.createElement('div');
+  body.className = 'body';
+  body.id = 'panel-' + gi;
+  const inner = document.createElement('div');
+  const ol = document.createElement('ol');
+  ol.className = 'units';
+
+  g.units.forEach((u, i) => {
+    const li = document.createElement('li');
+    const row = document.createElement(u.url ? 'a' : 'div');
+    row.className = 'unit';
+    if (u.url) { row.href = u.url; row.target = '_blank'; row.rel = 'noopener'; }
+    const num = document.createElement('span'); num.className = 'num'; num.textContent = i + 1;
+    const nm = document.createElement('span'); nm.className = 'uname'; nm.textContent = u.name;
+    const st = document.createElement('span');
+    st.className = 'state ' + (u.url ? 'go' : 'soon');
+    st.textContent = u.url ? '열기 ↗' : '준비 중';
+    row.append(num, nm, st);
+    li.appendChild(row);
+    ol.appendChild(li);
+  });
+
+  inner.appendChild(ol);
+  body.appendChild(inner);
+  acc.append(head, body);
+  list.appendChild(acc);
+
+  head.addEventListener('click', () => {
+    const open = acc.classList.toggle('open');
+    head.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+});
+</script>
+</body>
+</html>
