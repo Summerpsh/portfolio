@@ -55,8 +55,35 @@ a.unit:hover{border-color:var(--main);transform:translateX(4px)}
 .state.go{background:var(--main);color:#fff}
 .state.soon{background:var(--accent-soft);color:var(--accent)}
 
-@media (prefers-reduced-motion:reduce){.body,.arrow,.acc,.unit{transition:none}}
-@media (max-width:520px){.head{padding:16px 16px}.ico{width:42px;height:42px}ol.units{padding:2px 12px 16px}}
+/* 소단원 */
+button.unit{width:100%;font:inherit;color:inherit;text-align:left;cursor:pointer}
+button.unit:hover{border-color:var(--main)}
+button.unit:focus-visible{outline:3px solid var(--main);outline-offset:2px}
+.state.cnt{background:var(--main-soft);color:var(--main)}
+.sub-arrow{flex:none;font-size:.7rem;color:var(--main);transition:transform .3s}
+li.open>.unit .sub-arrow{transform:rotate(180deg)}
+li.open>.unit{border-color:var(--main)}
+.subwrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}
+li.open>.subwrap{grid-template-rows:1fr}
+.subwrap>div{overflow:hidden}
+ul.subs{list-style:none;padding:8px 0 4px 38px;display:grid;gap:6px}
+.mids{padding:10px 0 6px 38px;display:grid;gap:16px}
+.mid h4{display:flex;align-items:center;gap:8px;font-size:.95rem;font-weight:800;color:var(--main);margin:0 0 4px 2px}
+.mid h4::before{content:"";flex:none;width:5px;height:16px;border-radius:3px;background:var(--main)}
+.mid ul.subs{padding:6px 0 0 0}
+.sub{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;background:var(--bg);border:1px solid var(--line);font-size:.94rem;transition:.2s}
+a.sub:hover{border-color:var(--main);transform:translateX(4px)}
+.dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.sname{flex:1;font-weight:500}
+.sub.multi{flex-direction:column;align-items:stretch;gap:10px}
+.subhead{display:flex;align-items:center;gap:10px}
+.links{display:flex;flex-wrap:wrap;gap:6px;padding-left:18px}
+.lk{font-size:.82rem;font-weight:700;padding:5px 14px;border-radius:999px;background:var(--main);color:#fff;transition:.2s}
+a.lk:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(31,79,216,.25)}
+.lk.soon{background:var(--accent-soft);color:var(--accent)}
+
+@media (prefers-reduced-motion:reduce){.body,.arrow,.acc,.unit,.subwrap,.sub,.sub-arrow{transition:none}}
+@media (max-width:520px){.mids,ul.subs{padding-left:14px}.mid ul.subs{padding-left:0}.head{padding:16px 16px}.ico{width:42px;height:42px}ol.units{padding:2px 12px 16px}}
 </style>
 </head>
 <body>
@@ -65,108 +92,512 @@ a.unit:hover{border-color:var(--main);transform:translateX(4px)}
   <header class="title">
     <span class="tag">수업 자료</span>
     <h1>수업 PPT 모음</h1>
-    <p>학년을 누르면 단원 목록이 펼쳐져요.</p>
   </header>
   <main class="list" id="list"></main>
 </div>
 
 <script>
 /* ============================================================
-   ✏️ 여기만 고치면 돼요!
-   - 학년 추가/삭제: { ... } 덩어리 하나를 복사하거나 지우세요.
-   - 단원 이름: name 을 바꾸세요.
-   - PPT 링크: url 의 "" 안에 주소를 넣으면 '열기' 버튼이 생겨요.
-     (비워 두면 '준비 중'으로 표시돼요.)
-   - 단원명은 예시예요. 사용하시는 교육과정에 맞게 바꿔 주세요.
+   ✏️ 여기만 고치면 돼요!   (학년 > 대단원 > 중단원 > 소단원 > 자료)
+
+   ▶ 소단원에 자료(HTML 주소) 하나 넣기:
+       { name: "01. 마찰하면 생기는 전기", url: "https://주소" },
+
+   ▶ 소단원에 자료 여러 개 넣기 (url 대신 links):
+       { name: "01. 마찰하면 생기는 전기", links: [
+           { name: "개념 PPT", url: "https://주소1" },
+           { name: "실험 활동", url: "https://주소2" },
+           { name: "퀴즈", url: "" }
+       ]},
+
+   * url 을 비워 두면 '준비 중'으로 보여요.
+   * 줄 끝에는 쉼표(,)를 붙이되, 묶음({ ... } 또는 [ ... ])의 마지막 줄에는 붙이지 않아요.
+   * 필요 없는 소단원은 그 줄을 지우면 돼요. (앞뒤 쉼표 주의)
+   * 통합과학은 물리와 관련된 단원만 넣어 두었어요.
    ============================================================ */
 const DATA = [
   { grade: "중1", icon: "🌱", units: [
-    { name: "과학과 인류의 지속가능한 삶", url: "" },
-    { name: "생물의 구성과 다양성", url: "" },
-    { name: "열", url: "" },
-    { name: "물질의 상태 변화", url: "" },
-    { name: "힘의 작용", url: "" },
-    { name: "기체의 성질", url: "" },
-    { name: "태양계", url: "" }
+    { name: "과학과 인류의 지속가능한 삶", mids: [
+      { name: "1. 과학적 탐구", subs: [
+        { name: "01. 과학적 탐구 방법", url: "" },
+        { name: "02. 탐구 문제를 발견하고 탐구 계획서 작성하기", url: "" }
+      ]},
+      { name: "2. 과학기술과 우리 삶", subs: [
+        { name: "01. 과학과 함께하는 우리 삶", url: "" },
+        { name: "02. 인류의 지속가능한 삶", url: "" }
+      ]}
+    ]},
+    { name: "생물의 구성과 다양성", mids: [
+      { name: "1. 생물의 구성", subs: [
+        { name: "01. 생명활동이 일어나는 기본 단위", url: "" },
+        { name: "02. 종류에 따라 다양한 세포의 특징", url: "" },
+        { name: "03. 생물을 구성하는 단계", url: "" }
+      ]},
+      { name: "2. 생물다양성과 분류", subs: [
+        { name: "01. 지구에 살고 있는 다양한 생물", url: "" },
+        { name: "02. 생물을 분류하는 단계", url: "" },
+        { name: "03. 생물을 분류하는 체계", url: "" },
+        { name: "04. 학교와 주변 지역의 생물 분류하기", url: "" }
+      ]},
+      { name: "3. 생물다양성보전", subs: [
+        { name: "01. 소중한 생물다양성", url: "" },
+        { name: "02. 생물다양성보전을 위한 노력", url: "" }
+      ]}
+    ]},
+    { name: "열", mids: [
+      { name: "1. 열의 이동", subs: [
+        { name: "01. 온도에 따른 입자의 움직임과 배치", url: "" },
+        { name: "02. 온도가 같아지는 열평형", url: "" },
+        { name: "03. 열이 이동하는 방식", url: "" }
+      ]},
+      { name: "2. 비열과 열팽창", subs: [
+        { name: "01. 비열과 우리 생활", url: "" },
+        { name: "02. 열팽창과 우리 생활", url: "" }
+      ]}
+    ]},
+    { name: "물질의 상태 변화", mids: [
+      { name: "1. 물질을 구성하는 입자의 운동", subs: [
+        { name: "01. 퍼져 나가는 확산 현상", url: "" },
+        { name: "02. 액체 표면에서 일어나는 증발 현상", url: "" }
+      ]},
+      { name: "2. 물질의 상태와 상태 변화", subs: [
+        { name: "01. 물질의 세 가지 상태", url: "" },
+        { name: "02. 물질의 상태 변화", url: "" },
+        { name: "03. 상태 변화와 입자 배열의 변화", url: "" }
+      ]},
+      { name: "3. 상태 변화와 열에너지", subs: [
+        { name: "01. 물질을 냉각할 때의 온도 변화", url: "" },
+        { name: "02. 물질을 가열할 때의 온도 변화", url: "" },
+        { name: "03. 상태 변화 시 열에너지 출입 이용", url: "" }
+      ]}
+    ]},
+    { name: "힘의 작용", mids: [
+      { name: "1. 힘의 표현과 평형", subs: [
+        { name: "01. 힘을 표현하는 방법", url: "" },
+        { name: "02. 나란한 두 힘의 합력과 평형", url: "" }
+      ]},
+      { name: "2. 여러 가지 힘", subs: [
+        { name: "01. 지구가 당기는 힘", url: "" },
+        { name: "02. 원래대로 돌아가려는 힘", url: "" },
+        { name: "03. 미끄러짐을 방해하는 힘", url: "" },
+        { name: "04. 떠오르게 하는 힘", url: "" }
+      ]},
+      { name: "3. 힘의 작용과 운동 상태 변화", subs: [
+        { name: "01. 알짜힘에 따라 달라지는 운동 상태", url: "" },
+        { name: "02. 일상생활에서 찾는 힘의 작용", url: "" },
+        { name: "03. 힘의 특징을 이용한 기구나 장치 설계하기", url: "" }
+      ]}
+    ]},
+    { name: "기체의 성질", mids: [
+      { name: "1. 기체의 압력", subs: [
+        { name: "01. 일정한 면적에 작용하는 힘", url: "" },
+        { name: "02. 기체의 압력", url: "" }
+      ]},
+      { name: "2. 기체의 압력 및 온도와 부피 관계", subs: [
+        { name: "01. 기체의 압력과 부피 관계", url: "" },
+        { name: "02. 기체의 온도와 부피 관계", url: "" },
+        { name: "03. 기체의 부피 변화 예 조사하기", url: "" }
+      ]}
+    ]},
+    { name: "태양계", mids: [
+      { name: "1. 태양계의 구성", subs: [
+        { name: "01. 천체 망원경을 이용한 천체 관측", url: "" },
+        { name: "02. 태양계를 구성하는 천체", url: "" },
+        { name: "03. 활동하는 태양", url: "" }
+      ]},
+      { name: "2. 지구와 달", subs: [
+        { name: "01. 지구의 운동으로 나타나는 현상", url: "" },
+        { name: "02. 모양이 달라지는 달", url: "" },
+        { name: "03. 가려지는 태양과 달", url: "" }
+      ]}
+    ]}
   ]},
   { grade: "중2", icon: "🔬", units: [
-    { name: "물질의 특성", url: "" },
-    { name: "지권의 변화", url: "" },
-    { name: "빛과 파동", url: "" },
-    { name: "물질의 구성", url: "" },
-    { name: "식물과 에너지", url: "" },
-    { name: "동물과 에너지", url: "" },
-    { name: "전기와 자기", url: "" },
-    { name: "별과 우주", url: "" }
+    { name: "물질의 특성", mids: [
+      { name: "1. 물질의 특성", subs: [
+        { name: "01. 물질의 고유한 성질", url: "" },
+        { name: "02. 물질이 뜨고 가라앉는 성질", url: "" },
+        { name: "03. 물질이 녹는 정도", url: "" },
+        { name: "04. 물질의 상태가 변하는 온도", url: "" }
+      ]},
+      { name: "2. 혼합물의 분리", subs: [
+        { name: "01. 우리 주변에 있는 순물질과 혼합물", url: "" },
+        { name: "02. 물질의 특성을 이용한 혼합물 분리", url: "" },
+        { name: "03. 혼합물 분리 실험을 설계하고 수행하기", url: "" }
+      ]}
+    ]},
+    { name: "지권의 변화", mids: [
+      { name: "1. 지권의 구성", subs: [
+        { name: "01. 여러 요소로 이루어진 지구계", url: "" },
+        { name: "02. 층으로 이루어진 지권", url: "" },
+        { name: "03. 암석을 이루는 광물", url: "" },
+        { name: "04. 다양하게 활용되는 암석과 광물", url: "" }
+      ]},
+      { name: "2. 암석의 종류와 순환", subs: [
+        { name: "01. 마그마가 식어서 만들어진 화성암", url: "" },
+        { name: "02. 퇴적물이 굳어져 만들어진 퇴적암", url: "" },
+        { name: "03. 다른 암석이 변해서 만들어진 변성암", url: "" },
+        { name: "04. 순환하는 암석", url: "" },
+        { name: "05. 암석이 부서져 만들어진 토양", url: "" }
+      ]},
+      { name: "3. 대륙 이동과 판의 경계", subs: [
+        { name: "01. 움직이는 대륙", url: "" },
+        { name: "02. 크고 작은 여러 개의 판", url: "" }
+      ]}
+    ]},
+    { name: "빛과 파동", mids: [
+      { name: "1. 빛", subs: [
+        { name: "01. 물체를 보는 과정", url: "" },
+        { name: "02. 평면거울에서 상이 생기는 원리", url: "" },
+        { name: "03. 생활 속 거울과 렌즈", url: "" },
+        { name: "04. 거울과 렌즈에 의한 상", url: "" },
+        { name: "05. 물체의 색과 빛의 합성", url: "" }
+      ]},
+      { name: "2. 파동", subs: [
+        { name: "01. 퍼져 나가는 파동", url: "" },
+        { name: "02. 파동으로 알아보는 소리의 특성", url: "" }
+      ]}
+    ]},
+    { name: "물질의 구성", mids: [
+      { name: "1. 원소와 화합물", subs: [
+        { name: "01. 원자로 이루어진 원소와 화합물", url: "" },
+        { name: "02. 원소와 화합물을 나타내는 원소 기호", url: "" },
+        { name: "03. 다양한 원소의 종류", url: "" },
+        { name: "04. 원소를 배치한 주기율표", url: "" }
+      ]},
+      { name: "2. 물질의 구성 입자", subs: [
+        { name: "01. 물질을 이루는 입자", url: "" },
+        { name: "02. 전하를 띠는 이온", url: "" }
+      ]}
+    ]},
+    { name: "식물과 에너지", mids: [
+      { name: "1. 광합성과 에너지", subs: [
+        { name: "01. 양분을 만드는 광합성", url: "" },
+        { name: "02. 광합성에 영향을 미치는 환경요인", url: "" }
+      ]},
+      { name: "2. 식물의 호흡과 에너지", subs: [
+        { name: "01. 광합성과 호흡의 관계", url: "" },
+        { name: "02. 광합성으로 만들어진 양분의 저장과 이용", url: "" }
+      ]}
+    ]},
+    { name: "동물과 에너지", mids: [
+      { name: "1. 에너지원의 흡수와 운반", subs: [
+        { name: "01. 음식물에 들어 있는 영양소", url: "" },
+        { name: "02. 영양소를 소화하는 소화계", url: "" },
+        { name: "03. 소화효소가 작용하는 소화 과정", url: "" },
+        { name: "04. 물질을 운반하는 순환계", url: "" },
+        { name: "05. 혈액이 순환하는 경로", url: "" }
+      ]},
+      { name: "2. 세포호흡과 에너지", subs: [
+        { name: "01. 기체를 교환하는 호흡계", url: "" },
+        { name: "02. 노폐물을 내보내는 배설계", url: "" },
+        { name: "03. 세포호흡으로 얻는 에너지", url: "" }
+      ]}
+    ]},
+    { name: "전기와 자기", mids: [
+      { name: "1. 전기의 발생", subs: [
+        { name: "01. 마찰하면 생기는 전기", url: "" },
+        { name: "02. 가까이 하면 생기는 전기", url: "" }
+      ]},
+      { name: "2. 전기 회로와 에너지", subs: [
+        { name: "01. 전하의 흐름, 전류", url: "" },
+        { name: "02. 전류를 조절하는 전압과 저항", url: "" },
+        { name: "03. 저항의 직렬연결과 병렬연결", url: "" },
+        { name: "04. 전기 에너지의 전환과 소비 전력", url: "" }
+      ]},
+      { name: "3. 전류의 자기 작용", subs: [
+        { name: "01. 전류가 흐르는 코일 주위의 자기장", url: "" },
+        { name: "02. 전류가 흐르는 코일이 받는 힘", url: "" }
+      ]}
+    ]},
+    { name: "별과 우주", mids: [
+      { name: "1. 별", subs: [
+        { name: "01. 연주 시차로 구하는 별까지의 거리", url: "" },
+        { name: "02. 밝기에 따른 별의 등급", url: "" },
+        { name: "03. 색으로 비교하는 별의 표면 온도", url: "" }
+      ]},
+      { name: "2. 우리은하와 우주 탐사", subs: [
+        { name: "01. 태양계가 있는 우리은하", url: "" },
+        { name: "02. 우리은하를 이루는 천체", url: "" },
+        { name: "03. 팽창하는 우주", url: "" },
+        { name: "04. 인류에게 영향을 미치는 우주 탐사", url: "" },
+        { name: "05. 우주 탐사 계획 세우기", url: "" }
+      ]}
+    ]}
   ]},
   { grade: "중3", icon: "🚀", units: [
-    { name: "화학 반응의 규칙성", url: "" },
-    { name: "날씨와 기후변화", url: "" },
-    { name: "수권과 해수의 순환", url: "" },
-    { name: "운동과 에너지", url: "" },
-    { name: "자극과 반응", url: "" },
-    { name: "생식과 유전", url: "" },
-    { name: "재해⋅재난과 안전", url: "" },
-    { name: "과학과 나의 미래", url: "" }
+    { name: "화학 반응의 규칙성", mids: [
+      { name: "1. 화학 변화와 화학 반응식", subs: [
+        { name: "01. 주변에서 일어나는 물질의 변화", url: "" },
+        { name: "02. 새로운 물질을 생성하는 화학 변화", url: "" },
+        { name: "03. 화학 반응을 표현하는 화학 반응식", url: "" }
+      ]},
+      { name: "2. 화학 반응의 규칙", subs: [
+        { name: "01. 화학 반응에서 보존되는 질량", url: "" },
+        { name: "02. 화합물을 구성하는 원소의 질량비", url: "" },
+        { name: "03. 기체 반응에서 기체의 부피비", url: "" }
+      ]},
+      { name: "3. 화학 반응과 열에너지", subs: [
+        { name: "01. 화학 반응에서의 열에너지 출입", url: "" },
+        { name: "02. 열에너지가 출입하는 화학 반응 예", url: "" }
+      ]}
+    ]},
+    { name: "날씨와 기후 변화", mids: [
+      { name: "1. 지구의 기온과 대기 대순환", subs: [
+        { name: "01. 네 개의 권역으로 이루어진 대기권", url: "" },
+        { name: "02. 복사 평형에 영향을 주는 대기", url: "" },
+        { name: "03. 더워지는 지구와 환경 재난", url: "" },
+        { name: "04. 에너지를 운반하는 대기 대순환", url: "" }
+      ]},
+      { name: "2. 구름 생성과 강수 과정", subs: [
+        { name: "01. 대기가 포함하고 있는 수증기", url: "" },
+        { name: "02. 공기의 상승으로 만들어지는 구름", url: "" },
+        { name: "03. 구름에서 내리는 비와 눈", url: "" }
+      ]},
+      { name: "3. 기압과 날씨 변화", subs: [
+        { name: "01. 기압의 변화로 부는 바람", url: "" },
+        { name: "02. 날씨에 영향을 주는 공기 덩어리", url: "" },
+        { name: "03. 흐리거나 맑은 날씨", url: "" }
+      ]}
+    ]},
+    { name: "수권과 해수의 순환", mids: [
+      { name: "1. 수권의 활용과 가치", subs: [
+        { name: "01. 다양하게 분포하는 물", url: "" },
+        { name: "02. 수자원으로 가치 있는 물", url: "" }
+      ]},
+      { name: "2. 해수의 특성과 순환", subs: [
+        { name: "01. 위도와 깊이에 따른 해수의 온도", url: "" },
+        { name: "02. 해수에 녹아 있는 물질", url: "" },
+        { name: "03. 우리나라 주변 해양의 수온과 염분", url: "" },
+        { name: "04. 대기 대순환으로 생기는 해수의 순환", url: "" }
+      ]}
+    ]},
+    { name: "운동과 에너지", mids: [
+      { name: "1. 물체의 운동", subs: [
+        { name: "01. 속력이 일정한 물체의 운동", url: "" },
+        { name: "02. 속력이 변하는 물체의 운동", url: "" },
+        { name: "03. 자유 낙하 하는 물체의 운동", url: "" }
+      ]},
+      { name: "2. 일과 에너지", subs: [
+        { name: "01. 물체에 한 일", url: "" },
+        { name: "02. 자유 낙하 하는 물체의 에너지", url: "" },
+        { name: "03. 전환되는 역학적 에너지", url: "" },
+        { name: "04. 보존되는 역학적 에너지", url: "" }
+      ]}
+    ]},
+    { name: "자극과 반응", mids: [
+      { name: "1. 감각기관", subs: [
+        { name: "01. 시각을 담당하는 눈", url: "" },
+        { name: "02. 청각과 평형감각을 담당하는 귀", url: "" },
+        { name: "03. 미각을 담당하는 혀와 후각을 담당하는 코", url: "" },
+        { name: "04. 피부감각을 담당하는 피부", url: "" }
+      ]},
+      { name: "2. 신경계와 호르몬", subs: [
+        { name: "01. 자극을 전달하는 신경계", url: "" },
+        { name: "02. 신경계를 통해 일어나는 여러 가지 반응", url: "" },
+        { name: "03. 몸의 기능을 조절하는 호르몬", url: "" },
+        { name: "04. 호르몬과 신경계의 작용으로 유지되는 항상성", url: "" }
+      ]}
+    ]},
+    { name: "생식과 유전", mids: [
+      { name: "1. 생식", subs: [
+        { name: "01. 세포분열이 필요한 까닭", url: "" },
+        { name: "02. 염색체에 있는 유전자", url: "" },
+        { name: "03. 염색체 수가 유지되는 체세포분열", url: "" },
+        { name: "04. 생식세포가 형성되는 과정", url: "" },
+        { name: "05. 수정란이 개체가 되는 과정", url: "" }
+      ]},
+      { name: "2. 유전", subs: [
+        { name: "01. 멘델의 유전 원리(1)", url: "" },
+        { name: "02. 멘델의 유전 원리(2)", url: "" },
+        { name: "03. 사람의 유전형질과 유전 연구 방법", url: "" },
+        { name: "04. 유전 현상 모의 활동 하기", url: "" }
+      ]}
+    ]},
+    { name: "재해⋅재난과 안전", subs: [
+      { name: "01. 주변에서 일어나는 재해·재난", url: "" },
+      { name: "02. 재해·재난의 발생 원인과 피해", url: "" },
+      { name: "03. 재해·재난에 대한 대비 및 대처 방안", url: "" },
+      { name: "04. 재해·재난의 피해를 줄이기 위한 홍보 자료 제작하기", url: "" }
+    ]},
+    { name: "과학과 나의 미래", subs: [
+      { name: "01. 과학과 관련된 직업", url: "" },
+      { name: "02. 과학기술의 발달과 미래 사회의 직업 변화", url: "" },
+      { name: "03. 과학과 나의 진로", url: "" }
+    ]}
   ]},
   { grade: "통합과학", icon: "🧪", units: [
-    { name: "과학의 기초", url: "" },
-    { name: "물질과 규칙성", url: "" },
-    { name: "시스템과 상호작용", url: "" },
-    { name: "변화와 다양성", url: "" },
-    { name: "환경과 에너지", url: "" },
-    { name: "과학과 미래 사회", url: "" }
+    { name: "과학의 기초", mids: [
+      { name: "1. 과학의 기본량", subs: [
+        { name: "01. 자연 세계의 시간과 공간", url: "" },
+        { name: "02. 기본량과 단위", url: "" }
+      ]},
+      { name: "2. 과학의 측정과 우리 사회", subs: [
+        { name: "01. 과학적 측정 표준의 유용성", url: "" },
+        { name: "02. 자연의 변화 측정과 현대 문명", url: "" }
+      ]}
+    ]},
+    { name: "물질과 규칙성", mids: [
+      { name: "1. 자연의 구성 원소", subs: [
+        { name: "01. 우주의 시작과 원소의 생성", url: "" }
+      ]},
+      { name: "2. 물질의 규칙성과 성질", subs: [
+        { name: "04. 물질의 전기적 성질", url: "" }
+      ]}
+    ]},
+    { name: "시스템과 상호작용", mids: [
+      { name: "2. 역학 시스템", subs: [
+        { name: "01. 중력을 받는 물체의 운동", url: "" },
+        { name: "02. 운동과 충돌", url: "" }
+      ]}
+    ]},
+    { name: "환경과 에너지", mids: [
+      { name: "2. 에너지 전환과 활용", subs: [
+        { name: "01. 태양 에너지의 생성과 전환", url: "" },
+        { name: "02. 발전과 에너지원", url: "" },
+        { name: "03. 에너지 효율과 신재생 에너지", url: "" }
+      ]}
+    ]}
   ]},
-  { grade: "물리1", icon: "⚡", units: [
-    { name: "힘과 에너지", url: "" },
-    { name: "전기와 자기", url: "" },
-    { name: "빛과 물질", url: "" }
+  { grade: "물리학", icon: "⚡", units: [
+    { name: "힘과 에너지", mids: [
+      { name: "1. 힘과 운동", subs: [
+        { name: "01. 평형과 안정성", url: "" },
+        { name: "02. 등가속도 운동", url: "" },
+        { name: "03. 작용 반작용과 운동량 보존", url: "" }
+      ]},
+      { name: "2. 에너지와 열", subs: [
+        { name: "01. 역학적 에너지 보존", url: "" },
+        { name: "02. 열과 에너지", url: "" },
+        { name: "03. 열효율", url: "" }
+      ]}
+    ]},
+    { name: "전기와 자기", mids: [
+      { name: "1. 전기", subs: [
+        { name: "01. 전기장과 전위차", url: "" },
+        { name: "02. 저항의 연결과 소비 전력", url: "" },
+        { name: "03. 축전기와 센서", url: "" }
+      ]},
+      { name: "2. 자기", subs: [
+        { name: "01. 물질의 자성", url: "" },
+        { name: "02. 전류의 자기 작용", url: "" },
+        { name: "03. 전자기 유도", url: "" }
+      ]}
+    ]},
+    { name: "빛과 물질", mids: [
+      { name: "1. 빛의 이해", subs: [
+        { name: "01. 빛의 중첩과 간섭", url: "" },
+        { name: "02. 빛의 굴절", url: "" },
+        { name: "03. 빛과 물질의 이중성", url: "" }
+      ]},
+      { name: "2. 물질의 이해", subs: [
+        { name: "01. 에너지 준위", url: "" },
+        { name: "02. 에너지띠와 반도체", url: "" },
+        { name: "03. 특수 상대성 이론", url: "" }
+      ]}
+    ]}
   ]}
 ];
 /* ============================================================ */
 
 const list = document.getElementById('list');
 
-DATA.forEach((g, gi) => {
-  const acc = document.createElement('section');
-  acc.className = 'acc';
+function el(tag, cls, text){
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
 
-  const head = document.createElement('button');
+/* 소단원 한 줄 (자료 하나 또는 여러 개) */
+function subRow(it){
+  const li = document.createElement('li');
+  if (Array.isArray(it.links) && it.links.length > 0) {
+    const r = el('div', 'sub multi');
+    const sh = el('div', 'subhead');
+    sh.append(el('span', 'dot'), el('span', 'sname', it.name));
+    const lks = el('div', 'links');
+    it.links.forEach(l => {
+      const b = el(l.url ? 'a' : 'span', 'lk' + (l.url ? '' : ' soon'), l.url ? l.name + ' ↗' : l.name + ' (준비 중)');
+      if (l.url) { b.href = l.url; b.target = '_blank'; b.rel = 'noopener'; }
+      lks.appendChild(b);
+    });
+    r.append(sh, lks);
+    li.appendChild(r);
+  } else {
+    const r = el(it.url ? 'a' : 'div', 'sub');
+    if (it.url) { r.href = it.url; r.target = '_blank'; r.rel = 'noopener'; }
+    r.append(el('span', 'dot'), el('span', 'sname', it.name), el('span', 'state ' + (it.url ? 'go' : 'soon'), it.url ? '열기 ↗' : '준비 중'));
+    li.appendChild(r);
+  }
+  return li;
+}
+
+function subList(arr){
+  const ul = el('ul', 'subs');
+  arr.forEach(it => ul.appendChild(subRow(it)));
+  return ul;
+}
+
+DATA.forEach((g, gi) => {
+  const acc = el('section', 'acc');
+
+  const head = el('button', 'head');
   head.type = 'button';
-  head.className = 'head';
   head.setAttribute('aria-expanded', 'false');
   head.setAttribute('aria-controls', 'panel-' + gi);
+  const arrow = el('span', 'arrow', '▼'); arrow.setAttribute('aria-hidden', 'true');
+  head.append(el('span', 'ico', g.icon || '📘'), el('h2', '', g.grade), arrow);
 
-  const ico = document.createElement('span'); ico.className = 'ico'; ico.textContent = g.icon || '📘';
-  const h2 = document.createElement('h2'); h2.textContent = g.grade;
-  const cnt = document.createElement('span'); cnt.className = 'count'; cnt.textContent = g.units.length + '개 단원';
-  const arrow = document.createElement('span'); arrow.className = 'arrow'; arrow.textContent = '▼'; arrow.setAttribute('aria-hidden', 'true');
-  head.append(ico, h2, cnt, arrow);
-
-  const body = document.createElement('div');
-  body.className = 'body';
-  body.id = 'panel-' + gi;
-  const inner = document.createElement('div');
-  const ol = document.createElement('ol');
-  ol.className = 'units';
+  const body = el('div', 'body'); body.id = 'panel-' + gi;
+  const inner = el('div');
+  const ol = el('ol', 'units');
 
   g.units.forEach((u, i) => {
     const li = document.createElement('li');
-    const row = document.createElement(u.url ? 'a' : 'div');
-    row.className = 'unit';
-    if (u.url) { row.href = u.url; row.target = '_blank'; row.rel = 'noopener'; }
-    const num = document.createElement('span'); num.className = 'num'; num.textContent = i + 1;
-    const nm = document.createElement('span'); nm.className = 'uname'; nm.textContent = u.name;
-    const st = document.createElement('span');
-    st.className = 'state ' + (u.url ? 'go' : 'soon');
-    st.textContent = u.url ? '열기 ↗' : '준비 중';
-    row.append(num, nm, st);
-    li.appendChild(row);
+    const mids = Array.isArray(u.mids) ? u.mids : [];
+    const subs = Array.isArray(u.subs) ? u.subs : [];
+
+    if (mids.length || subs.length) {
+      /* 누르면 펼쳐지는 대단원 */
+      li.className = 'has-subs';
+      const row = el('button', 'unit');
+      row.type = 'button';
+      row.setAttribute('aria-expanded', 'false');
+      const sa = el('span', 'sub-arrow', '▼'); sa.setAttribute('aria-hidden', 'true');
+      row.append(el('span', 'num', i + 1), el('span', 'uname', u.name), sa);
+
+      const wrap = el('div', 'subwrap');
+      const wi = el('div');
+      if (mids.length) {
+        const box = el('div', 'mids');
+        mids.forEach(m => {
+          const mid = el('div', 'mid');
+          mid.append(el('h4', '', m.name), subList(Array.isArray(m.subs) ? m.subs : []));
+          box.appendChild(mid);
+        });
+        wi.appendChild(box);
+      } else {
+        wi.appendChild(subList(subs));
+      }
+      wrap.appendChild(wi);
+      li.append(row, wrap);
+
+      row.addEventListener('click', () => {
+        const open = li.classList.toggle('open');
+        row.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    } else {
+      /* 하위 단원이 없는 대단원 */
+      const row = el(u.url ? 'a' : 'div', 'unit');
+      if (u.url) { row.href = u.url; row.target = '_blank'; row.rel = 'noopener'; }
+      row.append(el('span', 'num', i + 1), el('span', 'uname', u.name), el('span', 'state ' + (u.url ? 'go' : 'soon'), u.url ? '열기 ↗' : '준비 중'));
+      li.appendChild(row);
+    }
     ol.appendChild(li);
   });
 
-  inner.appendChild(ol);
-  body.appendChild(inner);
+  inner.appendChild(ol); body.appendChild(inner);
   acc.append(head, body);
   list.appendChild(acc);
 
