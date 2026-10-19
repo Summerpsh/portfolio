@@ -1,0 +1,8 @@
+import{RoomScene,R,e,dom}from './room-engine.js';
+const target=document.getElementById('threeRoom');
+let root;const roomRef=R.createRef();
+try{const test=document.createElement('canvas'),gl=test.getContext('webgl2')||test.getContext('webgl');if(gl){gl.getExtension('WEBGL_lose_context')?.loseContext();root=dom.createRoot(target);document.getElementById('roomStage').classList.add('has-three');}}catch{}
+window.refreshRoomScene=()=>{if(!root||!window.roomBridge)return;const s=window.roomBridge.getState(),layout=s.layout==='square'?'studio':s.layout,mapId=id=>({led:'led-lamp',bulb:'bulb-lamp',rice:'rice-cooker',purifier:'air-purifier'}[id]||id);const position=o=>window.RoomAssessment.worldPosition(o,s.layout);const items=s.objects.filter(o=>s.items.some(i=>i.id===o.id)).map(o=>({id:o.id,productId:mapId(o.id),...position(o),rotation:(o.r||0)*Math.PI/180,color:o.color}));const furniture=s.objects.filter(o=>!s.items.some(i=>i.id===o.id)).map(o=>({id:o.id,kind:o.kind||o.id,...position(o),rotation:(o.r||0)*Math.PI/180,color:o.color,style:s.interior||'natural',visible:true}));root.render(e.jsx(RoomScene,{ref:roomRef,items,furniture,wallColor:s.wall,floorColor:s.floor,layout,lighting:s.lighting,view:s.view,cameraYaw:s.cameraYaw||0,companions:s.companions,companionsPaused:s.companionsPaused,editMode:true,gridSnap:true,selectedId:s.selected,onSelect:window.roomBridge.select,onMove:window.roomBridge.move,onCameraRotate:window.roomBridge.camera}));};
+window.refreshRoomScene();
+
+window.captureRoomScene=async()=>{if(!roomRef.current)throw new Error("3D 사진 미지원");return await roomRef.current.capture({width:1000,height:620})};
